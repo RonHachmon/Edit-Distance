@@ -1,2 +1,2 @@
 # Edit-Distance
-implementation Of edit distance algorithm
+Implementation of edit distance algorithm
