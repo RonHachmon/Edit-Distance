@@ -1,16 +1,20 @@
+import engine.EditDistance;
+import engine.OptionalWord;
+
 import java.util.List;
 
 public class Main {
     public static EditDistance editDistance =new EditDistance();
     public static void main(String[] args) {
 
-        List<String> potentialWords = editDistance.findPotentialWords("subtitue", 2);
-        for (String potentialWord:potentialWords) {
-            System.out.println(potentialWord);
+        List<OptionalWord> potentialWords = editDistance.findPotentialWords("adequate", 4);
+        for (OptionalWord potentialWord:potentialWords) {
+            String format = String.format("%s with %d edit distance", potentialWord.getOptionalWord(), potentialWord.getEditDistance());
+            System.out.println(format);
         }
 
 
-        runTests();
+        //runTests();
 
     }
 
