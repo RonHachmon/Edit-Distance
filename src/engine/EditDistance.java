@@ -1,34 +1,35 @@
+package engine;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EditDistance {
-    List<String> potentialWord = new ArrayList<>();
+    List<OptionalWord> potentialWords = new ArrayList<>();
     Set<String> dictionary;
 
     public EditDistance() {
         try {
-            dictionary = new HashSet<>(Files.readAllLines(Paths.get("./src/dictionary/words")));
+            dictionary = new HashSet<>(Files.readAllLines(Paths.get("./src/engine/dictionary/words")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public List<String> findPotentialWords(String currentWord, int mistakeValue) {
+    public List<OptionalWord> findPotentialWords(String currentWord, int maxEditDistance) {
         if(!dictionary.contains(currentWord)) {
             for (String word : dictionary) {
-                if (findEditDistance(currentWord, word) <= mistakeValue) {
-                    potentialWord.add(word);
+                int editDistance = findEditDistance(currentWord, word);
+                if (editDistance <= maxEditDistance) {
+                    potentialWords.add(new OptionalWord(word,editDistance));
                 }
 
             }
         }
-        return potentialWord;
+        Collections.sort(potentialWords);
+        return potentialWords;
     }
 
     public int findEditDistance(String currentWord, String potentialWord) {
