@@ -1,21 +1,23 @@
 import engine.EditDistance;
 import engine.OptionalWord;
 
+import java.io.IOException;
 import java.util.List;
-
 public class Main {
     public static EditDistance editDistance =new EditDistance();
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        List<OptionalWord> potentialWords = editDistance.findPotentialWords("adequate", 4);
+
+        long start = System.currentTimeMillis(); // Record start time
+        List<OptionalWord> potentialWords = editDistance.findPotentialWords("ab", 2);
         for (OptionalWord potentialWord:potentialWords) {
             String format = String.format("%s with %d edit distance", potentialWord.getOptionalWord(), potentialWord.getEditDistance());
             System.out.println(format);
         }
+        long end = System.currentTimeMillis(); // Record end time
+        long timeElapsed = end - start; // Calculate time elapsed
 
-
-        //runTests();
-
+        System.out.println("Time taken: " + timeElapsed + " milliseconds");
     }
 
     private static void runTests() {
