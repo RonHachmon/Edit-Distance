@@ -19,13 +19,14 @@ public class EditDistance {
     }
 
     public List<OptionalWord> findPotentialWords(String currentWord, int maxEditDistance) {
-        if(!dictionary.contains(currentWord)) {
+        if (!dictionary.contains(currentWord)) {
             for (String word : dictionary) {
-                int editDistance = findEditDistance(currentWord, word);
-                if (editDistance <= maxEditDistance) {
-                    potentialWords.add(new OptionalWord(word,editDistance));
+                if (Math.abs(currentWord.length() - word.length()) <= maxEditDistance) {
+                    int editDistance = findEditDistance(currentWord, word);
+                    if (editDistance <= maxEditDistance) {
+                        potentialWords.add(new OptionalWord(word, editDistance));
+                    }
                 }
-
             }
         }
         Collections.sort(potentialWords);
@@ -33,22 +34,21 @@ public class EditDistance {
     }
 
     public int findEditDistance(String currentWord, String potentialWord) {
-        int [][] dp = new int[currentWord.length() + 1][potentialWord.length() + 1];
+        int[][] dp = new int[currentWord.length() + 1][potentialWord.length() + 1];
         initializeMatrix(dp);
-        int matrixRowIndex=1;
+        int matrixRowIndex = 1;
         int matrixColumnIndex;
         for (int i = 0; i < currentWord.length(); i++) {
             char currentWordChar = currentWord.charAt(i);
-            matrixColumnIndex=1;
+            matrixColumnIndex = 1;
             for (int j = 0; j < potentialWord.length(); j++) {
                 char currentPotentialWord = potentialWord.charAt(j);
                 int delete = dp[matrixRowIndex][matrixColumnIndex - 1];
                 int add = dp[matrixRowIndex - 1][matrixColumnIndex];
                 int substitute = dp[matrixRowIndex - 1][matrixColumnIndex - 1];
                 if (currentWordChar == currentPotentialWord) {
-                    dp[matrixRowIndex][matrixColumnIndex] = min(substitute, add +1, delete +1) ;
-                }
-                else {
+                    dp[matrixRowIndex][matrixColumnIndex] = min(substitute, add + 1, delete + 1);
+                } else {
                     dp[matrixRowIndex][matrixColumnIndex] = min(substitute, add, delete) + 1;
                 }
                 matrixColumnIndex++;
@@ -57,7 +57,8 @@ public class EditDistance {
         }
         return dp[dp.length - 1][dp[0].length - 1];
     }
-    private int min(int ...min) {
+
+    private int min(int... min) {
         int minVal = min[0];
         for (int i = 1; i < min.length; i++) {
             if (min[i] < minVal) {
@@ -67,7 +68,7 @@ public class EditDistance {
         return minVal;
     }
 
-    private  void initializeMatrix(int[][] dp) {
+    private void initializeMatrix(int[][] dp) {
         for (int i = 0; i < dp.length; i++) {
             dp[i][0] = i;
         }
@@ -83,4 +84,11 @@ public class EditDistance {
 
     }
 
+    public List<OptionalWord> getPotentialWords() {
+        return potentialWords;
+    }
+
+    public Set<String> getDictionary() {
+        return dictionary;
+    }
 }
